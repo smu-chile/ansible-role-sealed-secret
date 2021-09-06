@@ -1,0 +1,35 @@
+## SealedSecret
+- name: "Verify that required string variables are defined"
+  assert:
+    that: 
+      - required_variable is defined
+      - required_variable | length > 0
+      - required_variable != None
+    fail_msg: "{{ required_variable }} needs to be set for the role to work"
+    success_msg: "Required variable {{ required_variable}} is defined"
+  loop_control:
+    loop_var: required_variable
+  with_items:
+    - "{{ SEALED_SECRET_RELEASE }}"
+    - "{{ SEALED_SECRET_KEY }}"
+    - "{{ SEALED_SECRET_CERTIFICATE }}"
+  no_log: True
+
+- name: show templating results
+  debug:
+    msg: "{{ lookup('template', 'sealed-secrets-key.j2') }}"
+
+
+- name: Create secret for sealed secret
+  shell: echo "{{ lookup('template', 'sealed-secrets-key.j2') }}" | kubectl apply -f -
+  register: result
+
+- debug:
+    var: result.stdout
+    
+- name: Create controller for sealed secrets
+  shell: kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/{{ SEALED_SECRET_RELEASE }}/controller.yaml
+  register: result
+
+- debug:
+    var: result.stdout

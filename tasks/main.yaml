@@ -15,11 +15,6 @@
     - "{{ SEALED_SECRET_CERTIFICATE }}"
   no_log: True
 
-- name: show templating results
-  debug:
-    msg: "{{ lookup('template', 'sealed-secrets-key.j2') }}"
-
-
 - name: Create secret for sealed secret
   shell: echo "{{ lookup('template', 'sealed-secrets-key.j2') }}" | kubectl apply -f -
   register: result

@@ -1,4 +1,4 @@
-Role Name
+Ansible Role Setup Sealedsecret
 =========
 
 Role to create a sealed secret deployment on a kubernetes cluster
@@ -28,10 +28,6 @@ Example Playbook
       SEALED_SECRET_RELEASE: "{{ lookup('env', 'SEALED_SECRET_RELEASE') }}"
 ```
 
-License
--------
-
-BSD
 
 Author Information
 ------------------

@@ -21,10 +21,26 @@
 
 - debug:
     var: result.stdout
-    
-- name: Create controller for sealed secrets
-  shell: kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/{{ SEALED_SECRET_RELEASE }}/controller.yaml
+
+- name: Download Controller manifest
+  shell: wget https://github.com/bitnami-labs/sealed-secrets/releases/download/{{ SEALED_SECRET_RELEASE }}/controller.yaml
   register: result
+
+- name: Download Controller manifest
+  replace:
+    path: controller.yaml
+    regexp: 'quay.io/bitnami/sealed-secrets-controller:v0.13.1'
+    replace: "bitnami/sealed-secrets-controller:v0.13.1"
+
+- name: Create controller for sealed secrets
+  shell: kubectl apply -f controller.yaml
+  register: result
+
+- name: Delete controller yaml
+  file:
+    state: absent
+    path: controller.yaml
+
 
 - debug:
     var: result.stdout

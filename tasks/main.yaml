@@ -29,8 +29,8 @@
 - name: Download Controller manifest
   replace:
     path: controller.yaml
-    regexp: 'quay.io/bitnami/sealed-secrets-controller:v0.13.1'
-    replace: "bitnami/sealed-secrets-controller:v0.13.1"
+    regexp: 'quay.io/bitnami/sealed-secrets-controller'
+    replace: "bitnami/sealed-secrets-controller"
 
 - name: Create controller for sealed secrets
   shell: kubectl apply -f controller.yaml
